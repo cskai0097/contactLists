@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import ContactRow from "./ContactRow";
 
 
@@ -9,32 +9,49 @@ const dummyContacts = [
   ];
   
 const ContactList = () => {
-const [contacts, setContacts] = useState(dummyContacts);
-console.log("Contacts: ", contacts)
-    return (
-        <table>
-            <thead>
-                <tr>
-                    <th colSpan="3">Contact List</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Name</td>
-                    <td>Email</td>
-                    <td>Phone</td>
-                </tr>
-                {
-                   contacts.map((contact)=>{
-                    return (
-                        <ContactRow key={contact.id} contact={contact}/>
-                    )
-                   })
-                }
-            </tbody>
-        </table>
-    )
+    const [contacts, setContacts] = useState(dummyContacts);
+        useEffect(()=>{
 
-}
-export default ContactList;
+            async function fetchContacts() {
+                try{
+                    const response = await fetch ("https://fsa-jsonplaceholder-69b5c48f1259.herokuapp.com/users")
+                    if (!response.ok){
+                        throw new Error('Network response was not okay')
+                    }
+                    const data = await response.json()
+                    setContacts(data)
+                    console.log(data)
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            fetchContacts();
+        },[])
+        console.log("Contacts: ", contacts)
+            return (
+                <table>
+                    <thead>
+                        <tr>
+                            <th colSpan="3">Contact List</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Name</td>
+                            <td>Email</td>
+                            <td>Phone</td>
+                        </tr>
+                        {
+                        contacts.map((contact)=>{
+                            return (
+                                <ContactRow key={contact.id} contact={contact}/>
+                            )
+                        })
+                        }
+                    </tbody>
+                </table>
+            )
+
+        }
+        export default ContactList;
 
