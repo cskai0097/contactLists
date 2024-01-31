@@ -8,7 +8,8 @@ const dummyContacts = [
     { id: 3, name: "BB-8", phone: "888-888-8888", email: "bb8@droids.com" },
   ];
   
-const ContactList = () => {
+const ContactList = ({setSelectedContactId}) => {
+    console.log('setSelectedContactId from ContactList: ',setSelectedContactId)
     const [contacts, setContacts] = useState(dummyContacts);
         useEffect(()=>{
 
@@ -44,13 +45,16 @@ const ContactList = () => {
                         {
                         contacts.map((contact)=>{
                             return (
-                                <ContactRow key={contact.id} contact={contact}/>
-                            )
-                        })
+                                <ContactRow
+                                    key={contact.id}
+                                    contact={contact} {...console.log("THIS IS A TEST IN CONTACTROW /> :", setSelectedContactId)}
+                                    setSelectedContactId={setSelectedContactId}
+                                    testdata={56789}
+                                />)})
                         }
                     </tbody>
                 </table>
-            )
+            );
 
         }
         export default ContactList;
